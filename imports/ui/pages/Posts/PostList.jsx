@@ -27,10 +27,14 @@ export default class PostList extends React.Component {
                         return (
                             <div key={post._id}>
                                 <p>Post id: {post._id} </p>
-                                <p>Post title: {post.title}, Post Description: {post.description} </p>
+                                <p>Post title: {post.title}, Post Description: {post.description}, Post Type: {post.type}, Post Views: {post.views}</p>
                                 <button onClick={() => {
                                     history.push("/posts/edit/" + post._id)
                                 }}> Edit post
+                                </button>
+                                <button onClick={() => {
+                                    history.push("/posts/view/" + post._id)
+                                }}> View post
                                 </button>
                             </div>
                         )

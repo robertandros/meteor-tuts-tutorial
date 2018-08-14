@@ -11,6 +11,8 @@ we created for you several branches, each of them being an iteration of the tuto
 - Go in the root directory of this project and run the following commands
 
 ```bash
+meteor npm install @babel/runtime@7.0.0-beta.36 # install older version babel [why? - package.json]
+meteor npm install --save core-js # install core-js # dependency removed in newer versions
 meteor npm install # to install all the dependencies
 npm run start # to run the project
 ```
