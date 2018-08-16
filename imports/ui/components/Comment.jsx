@@ -5,7 +5,7 @@ export default class Comment extends React.Component {
         const userId = Meteor.userId();
         return (
             <div style={{ backgroundColor: '#c9c9c9' }}>
-                <p>Email: {comment.email}</p>
+                <p>Email: {comment.author.email}</p>
                 <span>Text: {comment.text}</span>
                 {
                     userId === comment.userId || isOwner ?

@@ -2,15 +2,25 @@ import { Meteor } from 'meteor/meteor'
 import { Comments, Posts, Users } from '/db';
 
 getModifiedComments = (postId) => {
-    let comments = Comments.find({
-        postId
-    }).fetch();
-    comments.forEach((comment) => {
-        comment.email = Users.find({
-            _id: comment.userId
-        }).fetch()[0].emails[0].address;
+    // let comments = Comments.find({
+    //     postId
+    // }).fetch();
+    // comments.forEach((comment) => {
+    //     comment.email = Users.find({
+    //         _id: comment.userId
+    //     }).fetch()[0].emails[0].address;
+    // });
+    // return comments;
+    const query = Comments.createQuery({
+        $filters: { postId },
+        userId: 1,
+        text: 1,
+        author: {
+            email: 1
+        }
     });
-    return comments;
+
+    return query.fetch();
 }
 
 Meteor.methods({
