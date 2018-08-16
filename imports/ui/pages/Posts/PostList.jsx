@@ -1,4 +1,5 @@
 import React from 'react';
+import Post from '../../components/Post';
 
 export default class PostList extends React.Component {
     constructor() {
@@ -26,8 +27,7 @@ export default class PostList extends React.Component {
                     posts.map((post) => {
                         return (
                             <div key={post._id}>
-                                <p>Post id: {post._id} </p>
-                                <p>Post title: {post.title}, Post Description: {post.description}, Post Type: {post.type}, Post Views: {post.views}</p>
+                                <Post post={post} />
                                 <button onClick={() => {
                                     history.push("/posts/edit/" + post._id)
                                 }}> Edit post

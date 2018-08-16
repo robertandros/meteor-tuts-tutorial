@@ -1,28 +1,42 @@
 import React from 'react';
 
-export default class PostEdit extends React.Component {
+import Post from '../../components/Post';
+import CommentsList from '../../components/CommentsList';
+
+export default class PostView extends React.Component {
     constructor() {
         super();
-        post = {};
-    }
-
-    handleBackClick(history) {
-        history.push('/posts');
+        this.state = {};
     }
 
     componentDidMount() {
-        Meteor.call('post.updateViews', this.props.match.params._id, (err) => {
+        const { match } = this.props;
+        Meteor.call('post.updateViews', match.params._id, (err) => {
             if (err) {
                 return alert(err.reason);
             }
             alert('Post views updated.');
         });
+
+        Meteor.call('post.get', match.params._id, (err, post) => {
+            this.setState({
+                post
+            });
+        });
     }
 
     render() {
+        const { post } = this.state;
         const { history } = this.props;
+
+        if (!post) {
+            return <div>Loading....</div>
+        }
+
         return (
             <div className="post">
+                <Post post={post} history={history} />
+                <CommentsList post={post} />
                 <button onClick={() => history.push('/posts')}>Back to posts</button>
             </div>
         )

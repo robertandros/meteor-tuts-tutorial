@@ -10,10 +10,14 @@ export default new SimplSchema({
     type: String,
     views: {
         type: Number,
-        optional: true
+        defaultValue: 0
     },
     createdAt: {
         type: Date,
-        optional: true
+        defaultValue: new Date()
+    },
+    comments: {
+        type: Number,
+        defaultValue: 0
     }
 });

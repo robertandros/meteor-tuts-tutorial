@@ -2,6 +2,8 @@ import React from 'react';
 import {withTracker} from 'meteor/react-meteor-data';
 import {Posts} from '/db';
 
+import Post from '../../components/Post';
+
 class PostListReactive extends React.Component {
     constructor() {
         super();
@@ -20,8 +22,7 @@ class PostListReactive extends React.Component {
                     posts.map((post) => {
                         return (
                             <div key={post._id}>
-                                <p>Post id: {post._id} </p>
-                                <p>Post title: {post.title}, Post Description: {post.description} </p>
+                                <Post post={post} />
                                 <button onClick={() => {
                                     history.push("/posts/edit/" + post._id)
                                 }}> Edit post
