@@ -28,7 +28,7 @@ export default class CommentsList extends React.Component {
         });
     };
 
-    createComment = comment => {
+    createComment = (comment, post) => {
         Meteor.call('comment.create', comment, post._id, (err, comments) => {
             if (err) {
                 return alert(err.reason);
@@ -49,10 +49,10 @@ export default class CommentsList extends React.Component {
         });
     });
 
-    displayComments = (comments, isOwner) => {
+    displayComments = (comments, isOwner, post) => {
         if (comments) {
             return comments.map(comment => (
-                <Comment key={comment._id} comment={comment} isOwner={isOwner} removeComment={this.removeComment} />
+                <Comment key={comment._id} post={post} comment={comment} isOwner={isOwner} removeComment={this.removeComment} />
             ));
         };
     };
@@ -65,7 +65,7 @@ export default class CommentsList extends React.Component {
             <div className='comments-list'>
                 <CommentCreate createComment={this.createComment} post={post} />
                 <p> Comments </p>
-                {this.displayComments(comments, isOwner)}
+                {this.displayComments(comments, isOwner, post)}
             </div>
         );
     };

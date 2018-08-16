@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { Posts, Comments } from '/db';
 
+
 Meteor.methods({
     'post.create'(post) {
         const userId = Meteor.userId();
@@ -44,9 +45,21 @@ Meteor.methods({
     },
 
     'post.get'(_id) {
-        return Posts.findOne({
-            _id
+        const query = Posts.createQuery({
+            $filters: { _id },
+            userId: 1,
+            title: 1,
+            description: 1,
+            type: 1,
+            views: 1,
+            comments: 1,
+            commentsArr: {
+                _id: 1,
+                text: 1
+            }
         });
+    
+        return query.fetch()[0];
     },
 
     'post.isOwner'(postId, userId) {

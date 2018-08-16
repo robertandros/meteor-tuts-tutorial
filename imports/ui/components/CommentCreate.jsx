@@ -5,7 +5,7 @@ import { AutoForm, LongTextField } from 'uniforms-unstyled';
 
 export default class Comment extends React.Component {
     submit = comment => {
-        this.props.createComment(comment);
+        this.props.createComment(comment, this.props.post);
     };
 
     render() {
