@@ -40,7 +40,7 @@ export default class PostView extends React.Component {
 
         return (
             <div className="post">
-                <Post post={post} history={history} />
+                <Post post={post} history={history} onView={true}/>
                 <CommentsList post={post} />
                 <button onClick={this.redirectToPostPage}>Back to posts</button>
             </div>
@@ -49,6 +49,6 @@ export default class PostView extends React.Component {
 }
 
 PostView.propTypes = {
-    history: PropTypes.array,
+    history: PropTypes.object,
     match: PropTypes.object
 };

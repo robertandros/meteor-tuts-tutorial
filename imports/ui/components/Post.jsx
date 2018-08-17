@@ -22,6 +22,27 @@ class Post extends React.Component {
         history.push(`/posts/edit/${post._id}`);
     }
 
+    displayDelete = (post) => {
+        return (
+            post.userId === Meteor.userId() ?
+                <button onClick={this.deletePost}>Delete Post</button>
+                :
+                null
+        );
+    };
+
+    displayEditAndView = (onView) => {
+        return (
+            !onView ?
+                <div>
+                    <button onClick={this.redirectToPostEditPage}>Edit post</button>
+                    <button onClick={this.redirectToPostViewPage}>View post</button>
+                </div>
+                :
+                null
+        );
+    };
+
     deletePost = () => {
         const { post, history } = this.props;
         Meteor.call('post.remove', post._id, (err) => {
@@ -34,7 +55,7 @@ class Post extends React.Component {
     };
 
     render() {
-        const { post } = this.props;
+        const { post, onView } = this.props;
 
         if (!post) {
             return <div>Loading...</div>
@@ -48,20 +69,14 @@ class Post extends React.Component {
                 <p>Post Type: {PostTypesLabels[post.type]}</p>
                 <p>Post Views: {post.views}</p>
                 <p>Post Comments: {this.props.post.comments}</p>
-                {
-                    post.userId === Meteor.userId() ?
-                        <button onClick={this.deletePost}>Delete Post</button>
-                        :
-                        null
-                }
-                <button onClick={this.redirectToPostEditPage}>Edit post</button>
-                <button onClick={this.redirectToPostViewPage}>View post</button>
+                { this.displayDelete(post) }
+                { this.displayEditAndView(onView) }
             </div>
         );
     }
 }
 
-const PostContainer = withTracker(({ post, history }) => {
+const PostContainer = withTracker(({ post, history, onView }) => {
     Meteor.subscribe('posts');
 
     let dbPost = Posts.find({
@@ -70,7 +85,8 @@ const PostContainer = withTracker(({ post, history }) => {
 
     return {
         post: dbPost,
-        history
+        history,
+        onView
     };
 })(Post);
 
@@ -78,5 +94,6 @@ export default PostContainer;
 
 Post.propTypes = {
     post: PropTypes.object,
-    history: PropTypes.object
+    history: PropTypes.object,
+    onView: PropTypes.bool
 };

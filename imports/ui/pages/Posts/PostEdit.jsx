@@ -28,6 +28,7 @@ export default class PostEdit extends React.Component {
                 return alert(err.reason);
             }
             alert('Post modified!')
+            this.redirectToPostsPage();
         });
     };
 
@@ -44,7 +45,7 @@ export default class PostEdit extends React.Component {
                     <AutoField name="title" />
                     <LongTextField name="description" />
                     <SelectField name="type" options={PostTypesLabels} />
-                    <button type='submit'>Edit post</button>
+                    <button type='submit'>Save post</button>
                     <button onClick={this.redirectToPostsPage}>Back to posts</button>
                 </AutoForm>
             </div>
@@ -54,5 +55,5 @@ export default class PostEdit extends React.Component {
 
 PostEdit.propTypes = {
     history: PropTypes.object,
-    match: PropTypes.object
+    match: PropTypes.object,
 };
