@@ -22,7 +22,6 @@ export default class PostView extends React.Component {
             this.setState({
                 post
             });
-            console.log(this.state.post);
         });
     }
 

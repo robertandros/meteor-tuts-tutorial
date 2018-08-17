@@ -1,6 +1,7 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Posts } from '/db';
+import { PostTypesLabels } from '../utils/constants';
 
 class Post extends React.Component {
     deletePost = (post, history) => {
@@ -17,7 +18,7 @@ class Post extends React.Component {
         const { post, history } = this.props;
 
         if (!post) {
-            return <div>Loading....</div>
+            return <div>Loading or deleted...</div>
         }
 
         return (
@@ -25,7 +26,7 @@ class Post extends React.Component {
                 <p>Post id: {post._id}</p>
                 <p>Post title: {post.title}</p>
                 <p>Post Description: {post.description}</p>
-                <p>Post Type: {post.type}</p>
+                <p>Post Type: {PostTypesLabels[post.type]}</p>
                 <p>Post Views: {post.views}</p>
                 <p>Post Comments: {this.props.post.comments}</p>
                 {

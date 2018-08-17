@@ -1,21 +1,11 @@
 import React from 'react';
 import Post from '../../components/Post';
+import { Posts } from '/db';
+import { withTracker } from 'meteor/react-meteor-data';
 
-export default class PostList extends React.Component {
-    constructor() {
-        super();
-        this.state = {posts: null};
-    }
-
-    componentDidMount() {
-        Meteor.call('post.list', (err, posts) => {
-            this.setState({posts});
-        });
-    }
-
+class PostList extends React.Component {
     render() {
-        const {posts} = this.state;
-        const {history} = this.props;
+        const { posts, history } = this.props;
 
         if (!posts) {
             return <div>Loading....</div>
@@ -27,7 +17,7 @@ export default class PostList extends React.Component {
                     posts.map((post) => {
                         return (
                             <div key={post._id}>
-                                <Post post={post} />
+                                <Post post={post} history={history} />
                                 <button onClick={() => {
                                     history.push("/posts/edit/" + post._id)
                                 }}> Edit post
@@ -44,3 +34,14 @@ export default class PostList extends React.Component {
         )
     }
 }
+
+export default PostListContainer = withTracker(({ history }) => {
+    Meteor.subscribe('posts');
+
+    let posts = Posts.find().fetch();
+
+    return {
+        posts,
+        history
+    };
+})(PostList);

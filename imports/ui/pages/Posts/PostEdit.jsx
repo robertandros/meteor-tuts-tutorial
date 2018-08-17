@@ -1,17 +1,17 @@
 import React from 'react';
-import {AutoForm, AutoField, LongTextField, SelectField} from 'uniforms-unstyled';
+import { AutoForm, AutoField, LongTextField, SelectField } from 'uniforms-unstyled';
 import PostSchema from '/db/posts/schema';
-import { postTypes } from '../../utils/constants';
+import { PostTypesLabels } from '../../utils/constants';
 
 export default class PostEdit extends React.Component {
     constructor() {
         super();
-        this.state = {post: null};
+        this.state = { post: null };
     }
 
     componentDidMount() {
         Meteor.call('post.get', this.props.match.params._id, (err, post) => {
-            this.setState({post});
+            this.setState({ post });
         });
     }
 
@@ -25,8 +25,8 @@ export default class PostEdit extends React.Component {
     };
 
     render() {
-        const {history} = this.props;
-        const {post} = this.state;
+        const { history } = this.props;
+        const { post } = this.state;
 
         if (!post) {
             return <div>Loading....</div>
@@ -35,9 +35,9 @@ export default class PostEdit extends React.Component {
         return (
             <div className="post">
                 <AutoForm onSubmit={this.submit} schema={PostSchema} model={post}>
-                    <AutoField name="title"/>
-                    <LongTextField name="description"/>
-                    <SelectField name="type" allowedValues={postTypes}/>
+                    <AutoField name="title" />
+                    <LongTextField name="description" />
+                    <SelectField name="type" options={PostTypesLabels} />
                     <button type='submit'>Edit post</button>
                     <button onClick={() => history.push('/posts')}>Back to posts</button>
                 </AutoForm>

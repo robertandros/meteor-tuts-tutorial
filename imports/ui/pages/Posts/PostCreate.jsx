@@ -1,7 +1,7 @@
 import React from 'react';
 import { AutoForm, AutoField, LongTextField, SelectField } from 'uniforms-unstyled';
 import PostSchema from '/db/posts/schema';
-import { postTypes } from '../../utils/constants';
+import { PostTypesLabels } from '../../utils/constants';
 
 export default class PostCreate extends React.Component {
     constructor() {
@@ -13,7 +13,8 @@ export default class PostCreate extends React.Component {
             if (err) {
                 return alert(err.reason);
             }
-            alert('Post added!')
+            alert('Post added!');
+            this.props.history.push(`/posts`);
         });
     };
 
@@ -25,7 +26,7 @@ export default class PostCreate extends React.Component {
                 <AutoForm onSubmit={this.submit} schema={PostSchema}>
                     <AutoField name="title" />
                     <LongTextField name="description" />
-                    <SelectField name="type" allowedValues={postTypes} />
+                    <SelectField name="type" options={PostTypesLabels} />
                     <button type='submit'>Add post</button>
                     <button onClick={() => history.push('/posts')}>Back to posts</button>
                 </AutoForm>
