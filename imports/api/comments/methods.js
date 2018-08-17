@@ -27,10 +27,10 @@ Meteor.methods({
         Posts.update({
             _id: postId,
         }, {
-                $inc: {
-                    comments: 1
-                }
-            });
+            $inc: {
+                comments: 1
+            }
+        });
 
         return getModifiedComments(postId);
     },
@@ -47,10 +47,10 @@ Meteor.methods({
         Posts.update({
             _id: postId,
         }, {
-                $inc: {
-                    comments: -1
-                }
-            });
+            $inc: {
+                comments: -1
+            }
+        });
 
         return getModifiedComments(postId);
     }

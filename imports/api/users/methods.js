@@ -1,9 +1,18 @@
-import {Meteor} from 'meteor/meteor'
-import {Users} from '/db';
+import { Meteor } from 'meteor/meteor'
+import { Users } from '/db';
 
 Meteor.methods({
-    'user.register' (data) {
-        const user = Users.findOne({'emails.0.address': data.email});
+    'user.register'(data) {
+        const user = Users.createQuery({
+            $filters: {
+                'emails.0.address': data.email
+            },
+            userId: 1,
+            text: 1,
+            author: {
+                email: 1
+            }
+        }).fetch().length > 0;
 
         if (user) {
             throw new Meteor.Error(500, 'email_already_taken',

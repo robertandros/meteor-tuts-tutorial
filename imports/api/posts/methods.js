@@ -16,7 +16,16 @@ Meteor.methods({
     },
 
     'post.list'() {
-        return Posts.find().fetch();
+        const query = Posts.createQuery({
+            userId: 1,
+            title: 1,
+            description: 1,
+            type: 1,
+            views: 1,
+            comments: 1
+        });
+
+        return query.fetch();
     },
 
     'post.edit'(_id, post) {
@@ -58,14 +67,27 @@ Meteor.methods({
                 text: 1
             }
         });
-    
+
         return query.fetch()[0];
     },
 
     'post.isOwner'(postId, userId) {
-        return Posts.find({
-            _id: postId,
-            userId: userId
-        }).fetch().length > 0;
+        const query = Posts.createQuery({
+            $filters: {
+                _id: postId,
+                userId: userId
+            },
+            userId: 1,
+            title: 1,
+            description: 1,
+            type: 1,
+            views: 1,
+            comments: 1,
+            commentsArr: {
+                _id: 1,
+                text: 1
+            }
+        });
+        return query.fetch().length > 0;
     }
 });

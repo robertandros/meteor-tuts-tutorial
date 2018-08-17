@@ -1,10 +1,11 @@
 import Comments from './collection';
 import Posts from '../posts/collection';
+import Users from '../users/collection';
 
 Comments.addLinks({
     'author': {
         type: 'one',
-        collection: Meteor.users,
+        collection: Users,
         field: 'userId',
     },
     'post': {
