@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { AutoForm, AutoField } from 'uniforms-unstyled';
 import SimpleSchema from 'simpl-schema';
 
@@ -9,23 +10,22 @@ export default class Home extends React.Component {
             number: -1
         }
     }
-    getRandomNumber = () =>  {
-        Meteor.call('find.random_number',(err, number) => {
-           this.setState({number})
+    getRandomNumber = () => {
+        Meteor.call('find.random_number', (err, number) => {
+            this.setState({ number })
         });
     };
 
     submit = (data) => {
-        Meteor.call('method.checkString', data.myValue, (err, result) => {
-            if(err) {
+        Meteor.call('method.checkString', data.myValue, (err) => {
+            if (err) {
                 return alert(err.details);
             }
-            console.log(result);
         });
     };
 
     render() {
-        const {number} = this.state;
+        const { number } = this.state;
 
         return (
             <div className="home">

@@ -1,4 +1,5 @@
 import { Posts } from '/db';
+import { Meteor } from 'meteor/meteor';
 import CommentService from '../../comments/services/CommentService';
 
 export default class PostService {
@@ -11,7 +12,7 @@ export default class PostService {
             };
             Posts.insert(_post);
         }
-    };
+    }
 
     static getPostsList() {
         const query = Posts.createQuery({
@@ -24,7 +25,7 @@ export default class PostService {
         });
 
         return query.fetch();
-    };
+    }
 
     static editPost(_id, post) {
         Posts.update(_id, {
@@ -34,7 +35,7 @@ export default class PostService {
                 type: post.type
             }
         });
-    };
+    }
 
     static updateViews(_id) {
         Posts.update(_id, {
@@ -42,12 +43,12 @@ export default class PostService {
                 views: 1
             }
         });
-    };
+    }
 
     static removePost(_id) {
         CommentService.removeCommentsForPost(_id);
         Posts.remove(_id);
-    };
+    }
 
     static getPost(_id) {
         const query = Posts.createQuery({
@@ -65,7 +66,7 @@ export default class PostService {
         });
 
         return query.fetch()[0];
-    };
+    }
 
     static checkIfOwner(postId, userId) {
         const query = Posts.createQuery({
@@ -85,7 +86,7 @@ export default class PostService {
             }
         });
         return query.fetch().length > 0;
-    };
+    }
 
     static updateCommentsCounter(_id, value) {
         Posts.update({
@@ -96,4 +97,4 @@ export default class PostService {
             }
         });
     }
-};
+}

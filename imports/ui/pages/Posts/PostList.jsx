@@ -1,9 +1,17 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 import Post from '../../components/Post';
 import { Posts } from '/db';
 import { withTracker } from 'meteor/react-meteor-data';
 
 class PostList extends React.Component {
+
+    redirectToCreatePostPage = () => {
+        const { history } = this.props;
+        history.push('/posts/create');
+    }
+
     render() {
         const { posts, history } = this.props;
 
@@ -18,24 +26,16 @@ class PostList extends React.Component {
                         return (
                             <div key={post._id}>
                                 <Post post={post} history={history} />
-                                <button onClick={() => {
-                                    history.push("/posts/edit/" + post._id)
-                                }}> Edit post
-                                </button>
-                                <button onClick={() => {
-                                    history.push("/posts/view/" + post._id)
-                                }}> View post
-                                </button>
                             </div>
                         )
                     })}
-                <button onClick={() => history.push('/posts/create')}>Create a new post</button>
+                <button onClick={this.redirectToCreatePostPage}>Create a new post</button>
             </div>
         )
     }
 }
 
-export default PostListContainer = withTracker(({ history }) => {
+const PostListContainer = withTracker(({ history }) => {
     Meteor.subscribe('posts');
 
     let posts = Posts.find().fetch();
@@ -45,3 +45,10 @@ export default PostListContainer = withTracker(({ history }) => {
         history
     };
 })(PostList);
+
+export default PostListContainer;
+
+PostList.propTypes = {
+    posts: PropTypes.array,
+    history: PropTypes.object
+};

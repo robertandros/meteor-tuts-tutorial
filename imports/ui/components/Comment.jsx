@@ -1,7 +1,17 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 
 export default class Comment extends React.Component {
-    renderComment = (comment, isOwner, removeComment) => {
+    removeComment = () => {
+        const { _id, postId } = this.props.comment;
+        Meteor.call('comment.remove', _id, postId, (err, comments) => {
+            if (err) throw err;
+            this.props.setComments(comments);
+        });
+    };
+
+    renderComment = (comment, isOwner) => {
         const userId = Meteor.userId();
         return (
             <div style={{ backgroundColor: '#c9c9c9' }}>
@@ -9,7 +19,7 @@ export default class Comment extends React.Component {
                 <span>Text: {comment.text}</span>
                 {
                     userId === comment.userId || isOwner ?
-                        <button style={{ marginLeft: '10px' }} onClick={this.props.removeComment.bind(this, comment, removeComment)}>Delete comment</button>
+                        <button style={{ marginLeft: '10px' }} onClick={this.removeComment}>Delete comment</button>
                         :
                         null
                 }
@@ -18,12 +28,19 @@ export default class Comment extends React.Component {
     };
 
     render() {
-        var { comment, isOwner, removeComment } = this.props;
+        const { comment, isOwner } = this.props;
 
         return (
             <div className="comment">
-                {this.renderComment(comment, isOwner, removeComment)}
+                {this.renderComment(comment, isOwner)}
             </div>
         );
-    };
+    }
+}
+
+Comment.propTypes = {
+    post: PropTypes.object,
+    comment: PropTypes.object,
+    isOwner: PropTypes.bool,
+    setComments: PropTypes.func
 };

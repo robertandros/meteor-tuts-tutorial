@@ -1,4 +1,6 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 import { AutoForm, AutoField, LongTextField, SelectField } from 'uniforms-unstyled';
 import PostSchema from '/db/posts/schema';
 import { PostTypesLabels } from '../../utils/constants';
@@ -15,6 +17,11 @@ export default class PostEdit extends React.Component {
         });
     }
 
+    redirectToPostsPage = () => {
+        const { history } = this.props;
+        history.push('/posts');
+    }
+
     submit = (post) => {
         Meteor.call('post.edit', this.props.match.params._id, post, (err) => {
             if (err) {
@@ -25,7 +32,6 @@ export default class PostEdit extends React.Component {
     };
 
     render() {
-        const { history } = this.props;
         const { post } = this.state;
 
         if (!post) {
@@ -39,9 +45,14 @@ export default class PostEdit extends React.Component {
                     <LongTextField name="description" />
                     <SelectField name="type" options={PostTypesLabels} />
                     <button type='submit'>Edit post</button>
-                    <button onClick={() => history.push('/posts')}>Back to posts</button>
+                    <button onClick={this.redirectToPostsPage}>Back to posts</button>
                 </AutoForm>
             </div>
         )
     }
 }
+
+PostEdit.propTypes = {
+    history: PropTypes.object,
+    match: PropTypes.object
+};

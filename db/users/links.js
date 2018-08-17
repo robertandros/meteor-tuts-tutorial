@@ -11,4 +11,4 @@ Users.addLinks({
         collection: Comments,
         inversedBy: 'author'
     }
-})
+});

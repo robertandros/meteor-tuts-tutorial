@@ -15,4 +15,4 @@ export const PostTypesLabels = {
     [PostTypesEnum.PROGRAMMING]: 'Programming',
     [PostTypesEnum.PROJECT_MANAGEMENT]: 'Project Management',
     [PostTypesEnum.OTHER]: 'Other',
-}
+};

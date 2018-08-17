@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 import Post from '../../components/Post';
 import CommentsList from '../../components/CommentsList';
 
@@ -7,6 +8,11 @@ export default class PostView extends React.Component {
     constructor() {
         super();
         this.state = {};
+    }
+
+    redirectToPostPage = () => {
+        const { history } = this.props;
+        history.push('/posts');
     }
 
     componentDidMount() {
@@ -27,7 +33,6 @@ export default class PostView extends React.Component {
 
     render() {
         const { post } = this.state;
-        const { history } = this.props;
 
         if (!post) {
             return <div>Loading....</div>
@@ -37,8 +42,13 @@ export default class PostView extends React.Component {
             <div className="post">
                 <Post post={post} history={history} />
                 <CommentsList post={post} />
-                <button onClick={() => history.push('/posts')}>Back to posts</button>
+                <button onClick={this.redirectToPostPage}>Back to posts</button>
             </div>
         )
     }
 }
+
+PostView.propTypes = {
+    history: PropTypes.array,
+    match: PropTypes.object
+};

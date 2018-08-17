@@ -1,4 +1,5 @@
 import { Comments } from '/db';
+import { Meteor } from 'meteor/meteor';
 import PostService from '../../posts/services/PostService';
 
 export default class CommentService {
@@ -13,7 +14,7 @@ export default class CommentService {
         });
 
         return query.fetch();
-    };
+    }
 
     static createComment(comment, postId) {
         const _comment = {
@@ -25,11 +26,11 @@ export default class CommentService {
         Comments.insert(_comment);
         PostService.updateCommentsCounter(postId, 1);
         return this.getModifiedComments(postId);
-    };
+    }
 
     static getCommentsList(postId) {
         return this.getModifiedComments(postId);
-    };
+    }
 
     static removeComment(_id, postId) {
         Comments.remove({
@@ -38,11 +39,11 @@ export default class CommentService {
         PostService.updateCommentsCounter(postId, -1);
 
         return this.getModifiedComments(postId);
-    };
+    }
 
     static removeCommentsForPost(_id) {
         Comments.remove({
             postId: _id
         });
-    };
+    }
 }

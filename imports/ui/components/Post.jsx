@@ -1,10 +1,29 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Posts } from '/db';
 import { PostTypesLabels } from '../utils/constants';
 
 class Post extends React.Component {
-    deletePost = (post, history) => {
+
+    redirectToPostPage = () => {
+        const { history } = this.props;
+        history.push('/posts');
+    }
+
+    redirectToPostViewPage = () => {
+        const { post, history } = this.props;
+        history.push(`/posts/view/${post._id}`);
+    }
+
+    redirectToPostEditPage = () => {
+        const { post, history } = this.props;
+        history.push(`/posts/edit/${post._id}`);
+    }
+
+    deletePost = () => {
+        const { post, history } = this.props;
         Meteor.call('post.remove', post._id, (err) => {
             if (err) {
                 return alert(err.reason);
@@ -15,10 +34,10 @@ class Post extends React.Component {
     };
 
     render() {
-        const { post, history } = this.props;
+        const { post } = this.props;
 
         if (!post) {
-            return <div>Loading or deleted...</div>
+            return <div>Loading...</div>
         }
 
         return (
@@ -31,16 +50,18 @@ class Post extends React.Component {
                 <p>Post Comments: {this.props.post.comments}</p>
                 {
                     post.userId === Meteor.userId() ?
-                        <button onClick={this.deletePost.bind(this, post, history)}>Delete Post</button>
+                        <button onClick={this.deletePost}>Delete Post</button>
                         :
                         null
                 }
+                <button onClick={this.redirectToPostEditPage}>Edit post</button>
+                <button onClick={this.redirectToPostViewPage}>View post</button>
             </div>
         );
-    };
+    }
 }
 
-export default PostContainer = withTracker(({ post, history }) => {
+const PostContainer = withTracker(({ post, history }) => {
     Meteor.subscribe('posts');
 
     let dbPost = Posts.find({
@@ -52,3 +73,10 @@ export default PostContainer = withTracker(({ post, history }) => {
         history
     };
 })(Post);
+
+export default PostContainer;
+
+Post.propTypes = {
+    post: PropTypes.object,
+    history: PropTypes.object
+};
