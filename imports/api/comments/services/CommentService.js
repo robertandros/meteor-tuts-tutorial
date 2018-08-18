@@ -1,4 +1,4 @@
-import { Comments } from '/db';
+import { Comments, Users } from '/db';
 import { Meteor } from 'meteor/meteor';
 import PostService from '../../posts/services/PostService';
 
@@ -17,10 +17,17 @@ export default class CommentService {
     }
 
     static createComment(comment, postId) {
+        const userId = Meteor.userId();
+        const query = Users.createQuery({
+            $filters: { _id: userId },
+            email: 1
+        });
+        const email = query.fetch()[0].email;
         const _comment = {
             ...comment,
             postId,
-            userId: Meteor.userId()
+            userId,
+            authorEmail: email
         };
 
         Comments.insert(_comment);

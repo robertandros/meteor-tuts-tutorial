@@ -33,6 +33,7 @@ export default class PostView extends React.Component {
 
     render() {
         const { post } = this.state;
+        const { history } = this.props;
 
         if (!post) {
             return <div>Loading....</div>

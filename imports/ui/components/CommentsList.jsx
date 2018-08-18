@@ -3,23 +3,17 @@ import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
 import Comment from './Comment';
 import CommentCreate from './CommentCreate';
+import { Comments } from '/db'
+import { withQuery } from 'meteor/cultofcoders:grapher-react';
 
-export default class CommentsList extends React.Component {
+class CommentsList extends React.Component {
     constructor() {
         super();
         this.state = {};
     }
-
     componentDidMount() {
         const { post } = this.props;
         const userId = Meteor.userId();
-
-        Meteor.call('comments.list', post._id, (err, comments) => {
-            if (err) throw err;
-            this.setState({
-                comments
-            });
-        });
 
         Meteor.call('post.isOwner', post._id, userId, (err, isOwner) => {
             if (err) throw err;
@@ -29,14 +23,8 @@ export default class CommentsList extends React.Component {
         });
     }
 
-    setComments = comments => {
-        this.setState({
-            comments
-        });
-    };
-
     createComment = (comment, post) => {
-        Meteor.call('comment.create', comment, post._id, (err, comments) => {
+        Meteor.call('comment.create', comment, post._id, Meteor.userId(), (err, comments) => {
             if (err) {
                 return alert(err.reason);
             }
@@ -50,25 +38,38 @@ export default class CommentsList extends React.Component {
     displayComments = (comments, isOwner, post) => {
         if (comments) {
             return comments.map(comment => (
-                <Comment key={comment._id} post={post} comment={comment} isOwner={isOwner} setComments={ this.setComments }/>
+                <Comment key={comment._id} post={post} comment={comment} isOwner={isOwner} />
             ));
         }
     };
 
     render() {
-        const { comments, isOwner } = this.state;
-        const { post } = this.props;
+        const { isOwner } = this.state;
+        const { post, data } = this.props;
 
         return (
             <div className='comments-list'>
                 <CommentCreate createComment={this.createComment} post={post} />
                 <p> Comments </p>
-                {this.displayComments(comments, isOwner, post)}
+                {this.displayComments(data, isOwner, post)}
             </div>
         );
     }
 }
 
+const CommentsListContainer = withQuery(({ post }) => {
+    const query = Comments.createQuery({
+        _id: 1,
+        text: 1,
+        userId: 1,
+        authorEmail: 1
+    }, { postId: post._id });
+    return query;
+}, { reactive: true })(CommentsList);
+
+export default CommentsListContainer;
+
 CommentsList.propTypes = {
-    post: PropTypes.object
+    post: PropTypes.object,
+    data: PropTypes.array
 };

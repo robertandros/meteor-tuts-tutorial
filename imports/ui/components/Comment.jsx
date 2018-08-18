@@ -5,9 +5,8 @@ import PropTypes from 'prop-types';
 export default class Comment extends React.Component {
     removeComment = () => {
         const { _id, postId } = this.props.comment;
-        Meteor.call('comment.remove', _id, postId, (err, comments) => {
+        Meteor.call('comment.remove', _id, postId, (err) => {
             if (err) throw err;
-            this.props.setComments(comments);
         });
     };
 
@@ -15,7 +14,7 @@ export default class Comment extends React.Component {
         const userId = Meteor.userId();
         return (
             <div style={{ backgroundColor: '#c9c9c9' }}>
-                <p>Email: {comment.author.email}</p>
+                <p>Email: {comment.authorEmail}</p>
                 <span>Text: {comment.text}</span>
                 {
                     userId === comment.userId || isOwner ?
@@ -42,5 +41,4 @@ Comment.propTypes = {
     post: PropTypes.object,
     comment: PropTypes.object,
     isOwner: PropTypes.bool,
-    setComments: PropTypes.func
 };

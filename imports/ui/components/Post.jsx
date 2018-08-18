@@ -31,11 +31,16 @@ class Post extends React.Component {
         );
     };
 
-    displayEditAndView = (onView) => {
+    displayEditAndView = (post, onView) => {
         return (
             !onView ?
                 <div>
-                    <button onClick={this.redirectToPostEditPage}>Edit post</button>
+                    {(
+                        post.userId === Meteor.userId() ?
+                            <button onClick={this.redirectToPostEditPage}>Edit post</button>
+                            :
+                            null
+                    )}
                     <button onClick={this.redirectToPostViewPage}>View post</button>
                 </div>
                 :
@@ -44,13 +49,13 @@ class Post extends React.Component {
     };
 
     deletePost = () => {
-        const { post, history } = this.props;
+        const { post } = this.props;
         Meteor.call('post.remove', post._id, (err) => {
             if (err) {
                 return alert(err.reason);
             }
             alert('Post removed.');
-            history.push('/posts');
+            this.redirectToPostPage();
         });
     };
 
@@ -70,7 +75,7 @@ class Post extends React.Component {
                 <p>Post Views: {post.views}</p>
                 <p>Post Comments: {this.props.post.comments}</p>
                 { this.displayDelete(post) }
-                { this.displayEditAndView(onView) }
+                { this.displayEditAndView(post, onView) }
             </div>
         );
     }

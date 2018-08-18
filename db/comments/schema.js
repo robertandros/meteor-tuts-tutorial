@@ -9,5 +9,9 @@ export default new SimplSchema({
     postId: {
         type: String,
         optional: true
+    },
+    authorEmail: {
+        type: String,
+        optional: true
     }
 });
